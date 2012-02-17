@@ -1,6 +1,6 @@
 $     = Spine.$
-Gfx   = require('gfx')
-Stage = require('./stage')
+require('gfx') unless $.fn.gfx
+Stage ?= require('./stage')
 
 class Panel extends Stage
   title: false
@@ -17,11 +17,11 @@ class Panel extends Stage
   setTitle: (title = '') ->
     @header.find('h2:first').html(title)
     
-  addButton: (text, callback) ->
+  addButton: (text, callback, elem = @header) ->
     callback = @[callback] if typeof callback is 'string'
     button = $('<button />').text(text)
     button.tap(@proxy(callback))
-    @header.append(button)
+    elem.append(button)
     button
   
   activate: (params = {}) ->
@@ -45,22 +45,26 @@ class Panel extends Stage
       @el.addClass('active')
       @content.gfxSlideIn(@effectOptions(direction: 'left'))
       @header.gfxSlideIn(@effectOptions(direction: 'left', fade: true, distance: 50))
+      @footer.gfxSlideIn(@effectOptions(direction: 'left'))
     
     right: ->
       @el.addClass('active')
       @content.gfxSlideIn(@effectOptions(direction: 'right'))
       @header.gfxSlideIn(@effectOptions(direction: 'right', fade: true, distance: 50))
+      @footer.gfxSlideIn(@effectOptions(direction: 'right'))
   
   reverseEffects:
     left: ->
       @content.gfxSlideOut(@effectOptions(direction: 'right'))
       @header.gfxSlideOut(@effectOptions(direction: 'right', fade: true, distance: 50))
+      @footer.gfxSlideOut(@effectOptions(direction: 'right'))
       @content.queueNext => 
         @el.removeClass('active')
     
     right: ->
       @content.gfxSlideOut(@effectOptions(direction: 'left'))
       @header.gfxSlideOut(@effectOptions(direction: 'left', fade: true, distance: 50))
+      @footer.gfxSlideOut(@effectOptions(direction: 'left'))
       @content.queueNext => 
         @el.removeClass('active')
         

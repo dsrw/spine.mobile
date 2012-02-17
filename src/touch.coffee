@@ -1,4 +1,4 @@
-{$} = require('spine')
+$ ?= require('spine').$
 
 $.support.touch = ('ontouchstart' of window)
   
